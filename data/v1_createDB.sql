@@ -82,3 +82,58 @@ CREATE TABLE V1_CompositionEq
 --   bronze NUMBER(4),
 --   CONSTRAINT M_PK PRIMARY KEY (numEp),
 -- )
+
+CREATE VIEW LesAgesSportifs AS
+SELECT numSp, nomSp,prenomSp, pays, categorieSp, dateNaisSp,
+       CAST((julianday('now') - julianday(dateNaisSp)) / 365.25 AS INTEGER) AS ageSp
+FROM V1_LesSportifs;
+
+CREATE VIEW LesNbsEquipiers AS
+SELECT numEq, count(numSp) AS nbEquipiersEq
+FROM V1_CompositionEq
+GROUP BY numEq;
+
+CREATE VIEW AgeMoyEqOr AS
+WITH numEqGold AS (
+  SELECT numEq
+  FROM V1_ParticipationsEq
+  WHERE typeMedaille = 'gold'
+),
+numSpFromEqGold AS (
+  SELECT numSp
+  FROM V1_CompositionEq
+  WHERE numEq IN numEqGold
+)
+SELECT AVG(ageSp)
+FROM LesAgesSportifs WHERE numSp IN numSpFromEqGold;
+
+CREATE VIEW ClassementPays AS
+WITH MedIndivParPays AS (
+  SELECT s.pays, p.typeMedaille
+  FROM V1_LesSportifs s
+  JOIN V1_ParticipationsIndiv p USING(numSp)
+  WHERE p.typeMedaille IS NOT NULL
+),
+MedEq AS (
+  SELECT c.numSp, pe.typeMedaille
+  FROM V1_CompositionEq c
+  JOIN V1_ParticipationsEq pe USING(numEq)
+  WHERE pe.typeMedaille IS NOT NULL
+),
+MedEqParPays AS (
+  SELECT s.pays, e.typeMedaille
+  FROM V1_LesSportifs s
+  JOIN MedEq e USING(numSp)
+),
+ToutesMedParPays AS (
+  SELECT * FROM MedIndivParPays
+  UNION ALL
+  SELECT * FROM MedEqParPays
+)
+SELECT pays,
+       COUNT(CASE WHEN typeMedaille = 'gold' THEN 1 END)   AS nbOr,
+       COUNT(CASE WHEN typeMedaille = 'silver' THEN 1 END) AS nbArgent,
+       COUNT(CASE WHEN typeMedaille = 'bronze' THEN 1 END) AS nbBronze
+FROM ToutesMedParPays
+GROUP BY pays
+ORDER BY (nbOr + nbArgent + nbBronze) DESC, pays ASC;

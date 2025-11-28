@@ -15,7 +15,11 @@ actions = {
     "1": lambda: database_functions.database_create(data),
     "2": lambda: database_functions.database_insert(data),
     "3": lambda: database_functions.database_delete(data),
-    "4": lambda: database_queries.liste_epreuves(data, "Ski alpin"),
+    # "4": lambda: database_queries.liste_epreuves(data, "Ski alpin"),
+    "4": lambda: database_queries.LesAgesSportifs(data),
+    "5": lambda: database_queries.LesNbsEquipiers(data),
+    "6": lambda: database_queries.AgeMoyEqOr(data),
+    "7": lambda: database_queries.ClassementPays(data),
     "q": quitter
 }
 
@@ -25,7 +29,11 @@ def menu():
     print("1 - Créer la base de données")
     print("2 - Insérer les données du fichier Excel")
     print("3 - Supprimer la base de données")
-    print("4 - Liste des épreuves de ski alpin")
+    # print("4 - Liste des épreuves de ski alpin")
+    print("4 - Liste des les ages de sportifs")
+    print("5 - Liste des nmbr d'équipiers par équipe")
+    print("6 - L'age moyen des équipes qui ont gagné une médaille d'or")
+    print("7 - Classement des pays selon leur nombre de médailles ")
     print("q - Quitter")
 
 # Fonction principale

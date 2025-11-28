@@ -1,3 +1,7 @@
+DROP VIEW IF EXISTS ClassementPays;
+DROP VIEW IF EXISTS AgeMoyEqOr;
+DROP VIEW IF EXISTS LesNbsEquipiers;
+DROP VIEW IF EXISTS LesAgesSportifs;
 DROP TABLE IF EXISTS V1_ParticipationsIndiv;
 DROP TABLE IF EXISTS V1_ParticipationsEq;
 DROP TABLE IF EXISTS V1_CompositionEq;
