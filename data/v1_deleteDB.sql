@@ -1,3 +1,9 @@
+DROP TRIGGER IF EXISTS CheckPaysSportifEq;
+DROP TRIGGER IF EXISTS trig_verif_sportif_unique_par_epreuve;
+DROP TRIGGER IF EXISTS CheckOnlyMenOnlyWomen;
+DROP TRIGGER IF EXISTS CheckOnlyCouple;
+DROP TRIGGER IF EXISTS CheckOnlyEq;
+DROP TRIGGER IF EXISTS CheckOnlyIndiv;
 DROP VIEW IF EXISTS ClassementPays;
 DROP VIEW IF EXISTS AgeMoyEqOr;
 DROP VIEW IF EXISTS LesNbsEquipiers;

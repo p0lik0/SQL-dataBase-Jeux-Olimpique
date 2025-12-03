@@ -103,7 +103,6 @@ def read_excel_file_V0(data:sqlite3.Connection, file):
 
     for ix, row in df_participations_indiv.iterrows():
         try :
-            # if row['numSp']!='null':
                 valMedaille = "NULL" if row['typeMedaille']=='null' else f"'{row['typeMedaille']}'"
                 query = "insert into V1_ParticipationsIndiv values ({},{},{})".format(
                     row['numEp'], row['numIn'], valMedaille
@@ -127,9 +126,10 @@ def read_excel_file_V0(data:sqlite3.Connection, file):
 
     for ix, row in df_participations_eq.iterrows():
         try :
-            if row['numSp']!='null' and row['typeMedaille']!='null':
-                query = "insert into V1_ParticipationsEq values ({},{},'{}')".format(
-                    row['numEp'], row['numSp'], None if row['typeMedaille']=='null' else row['typeMedaille'])
+                valMedaille = "NULL" if row['typeMedaille']=='null' else f"'{row['typeMedaille']}'"
+                query = "insert into V1_ParticipationsEq values ({},{},{})".format(
+                    row['numEp'], row['numIn'], valMedaille
+                )
                 print(query)
                 cursor.execute(query)
         except IntegrityError as err:

@@ -74,15 +74,6 @@ CREATE TABLE V1_CompositionEq
   CONSTRAINT CE_FK2 FOREIGN KEY (numSp) REFERENCES V1_LesSportifs(numSp)
 );
 
--- CREATE TABLE V1_Medailles
--- (
---   numEp NUMBER(3),
---   gold NUMBER(4),
---   silver NUMBER(4),
---   bronze NUMBER(4),
---   CONSTRAINT M_PK PRIMARY KEY (numEp),
--- )
-
 CREATE VIEW LesAgesSportifs AS
 SELECT numSp, nomSp,prenomSp, pays, categorieSp, dateNaisSp,
        CAST((julianday('now') - julianday(dateNaisSp)) / 365.25 AS INTEGER) AS ageSp
@@ -109,21 +100,21 @@ FROM LesAgesSportifs WHERE numSp IN numSpFromEqGold;
 
 CREATE VIEW ClassementPays AS
 WITH MedIndivParPays AS (
-  SELECT s.pays, p.typeMedaille
-  FROM V1_LesSportifs s
-  JOIN V1_ParticipationsIndiv p USING(numSp)
-  WHERE p.typeMedaille IS NOT NULL
+  SELECT pays, typeMedaille
+  FROM V1_LesSportifs
+  JOIN V1_ParticipationsIndiv USING(numSp)
+  WHERE typeMedaille IS NOT NULL
 ),
 MedEq AS (
-  SELECT c.numSp, pe.typeMedaille
-  FROM V1_CompositionEq c
-  JOIN V1_ParticipationsEq pe USING(numEq)
-  WHERE pe.typeMedaille IS NOT NULL
+  SELECT numSp, typeMedaille
+  FROM V1_CompositionEq
+  JOIN V1_ParticipationsEq USING(numEq)
+  WHERE typeMedaille IS NOT NULL
 ),
 MedEqParPays AS (
-  SELECT s.pays, e.typeMedaille
-  FROM V1_LesSportifs s
-  JOIN MedEq e USING(numSp)
+  SELECT pays, typeMedaille
+  FROM V1_LesSportifs
+  JOIN MedEq USING(numSp)
 ),
 ToutesMedParPays AS (
   SELECT * FROM MedIndivParPays
@@ -137,3 +128,4 @@ SELECT pays,
 FROM ToutesMedParPays
 GROUP BY pays
 ORDER BY (nbOr + nbArgent + nbBronze) DESC, pays ASC;
+
