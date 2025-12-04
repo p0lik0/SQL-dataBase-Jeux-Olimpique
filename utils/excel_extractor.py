@@ -8,10 +8,10 @@ def read_excel_file_V0(data:sqlite3.Connection, file):
 
     df_sportifs = pandas.read_excel(file, sheet_name='LesSportifsEQ', dtype=str)
     df_sportifs = df_sportifs.where(pandas.notnull(df_sportifs), 'null')
-    df_sportifs = df_sportifs.drop_duplicates(subset=['numSp'])
+    df_sportifs_sans_dupl_numSp = df_sportifs.drop_duplicates(subset=['numSp'])
 
     cursor = data.cursor()
-    for ix, row in df_sportifs.iterrows():
+    for ix, row in df_sportifs_sans_dupl_numSp.iterrows():
         try:
             query = "insert into V1_LesSportifs values ({},'{}','{}','{}','{}','{}')".format(
                 row['numSp'], row['nomSp'], row['prenomSp'], row['pays'], row['categorieSp'], row['dateNaisSp'])

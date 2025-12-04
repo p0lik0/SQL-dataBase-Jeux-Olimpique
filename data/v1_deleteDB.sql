@@ -1,3 +1,4 @@
+DROP TRIGGER IF EXISTS trig_verif_2_equipiers_au_moins;
 DROP TRIGGER IF EXISTS CheckPaysSportifEq;
 DROP TRIGGER IF EXISTS trig_verif_sportif_unique_par_epreuve;
 DROP TRIGGER IF EXISTS CheckOnlyMenOnlyWomen;

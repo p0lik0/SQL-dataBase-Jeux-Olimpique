@@ -60,3 +60,10 @@ BEGIN
           AND pays != (SELECT pays FROM V1_LesSportifs WHERE numSp=NEW.numSp)
     );
 END;/
+
+CREATE TRIGGER trig_verif_2_equipiers_au_moins 
+BEFORE INSERT ON V1_ParticipationsEq
+WHEN (SELECT nbEquipiersEq FROM LesNbsEquipiers WHERE numEq=NEW.numEq)<2
+BEGIN
+    SELECT RAISE(ABORT,'L équipe doit avoir au moins 2 équipiers pour participer à une épreuve par équipe ou par couple');
+END;/
